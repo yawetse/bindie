@@ -6,7 +6,7 @@ Bindie maps UI elements to a bindie object. This is a quick and simple vanilla J
 
 When paired with ajax forms (check out  [formie](http://npmjs.org/package/formie)), provides a comprehensive data-binding ui framework without the baggage of a full framework.</p>
 
- [API Documenation](https://yawetse.github.io/bindie/doc/html/index.html)
+ [API Documenation](https://yawetse.github.io/bindie/api/html/index.html)
 
 ## Example
 
