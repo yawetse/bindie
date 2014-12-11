@@ -2,7 +2,7 @@
   "title": "Bindie - CommonJS/Browserified Data, Model, View binding",
   "name": "bindie",
   "description": "A simple way to bind model changes to a view",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "engines": {
     "node": ">=0.10.x"
