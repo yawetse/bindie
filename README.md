@@ -1,4 +1,4 @@
-# bindie
+# bindie  [![NPM version](https://badge.fury.io/js/bindie.svg)](http://badge.fury.io/js/bindie)
 
 ** CommonJS/Browserified simple data view binding, without magic **
 
