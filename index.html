@@ -1,175 +1,68 @@
-<!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Bindie by yawetse</title>
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <div class="wrapper">
-      <header>
-        <h1>Bindie</h1>
-        <p>A quick way to bind model changes to a view</p>
+<head>
+  <title>Bindie</title>
+  <link rel="stylesheet" type="text/css" href="stylesheets/example.css">
+  <!-- <link rel="stylesheet" type="text/css" href="stylesheets/bindie.css"> -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src='js/example.min.js'></script>
+</head>
 
-        <p class="view"><a href="https://github.com/yawetse/bindie">View the Project on GitHub <small>yawetse/bindie</small></a></p>
+<body>
+  <div class="container">
+    <header class="clearfix">
+      <h1>CommonJS/Browserified simple data view binding, without magic</h1>
+      <p>Bindie maps ui elements to a bindie object. This is a quick and simple vanilla JS way to data bind element. When paired with ajax forms (check out <a href="http://npmjs.org/package/formie">formie</a>), provides a comprehensive data-binding ui framework without the baggage of a full framework.</p>
+      </p>
+      <h3>Full API <a href="http://yawetse.github.io/bindie/api/html">documentation</a>
+      </h3>
 
+    </header>
+    <div class="bindie-test">
+      <h1>Bindie Test
+        <small>
+          <button id="yawbutton">@yaw</button>
+          <button id="rafbutton">@raf</button>
+          <!-- <button id="ajaxbutton">@ajax</button> -->
+        </small>
+      </h1>
 
-        <ul>
-          <li><a href="https://github.com/yawetse/bindie/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/yawetse/bindie/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/yawetse/bindie">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <h1>
-<a id="bindie" class="anchor" href="#bindie" aria-hidden="true"><span class="octicon octicon-link"></span></a>bindie</h1>
-
-<p>** CommonJS/Browserified simple data view binding, without magic **</p>
-
-<p>Bindie maps UI elements to a bindie object. This is a quick and simple vanilla JS way to data bind element. </p>
-
-<p>When paired with ajax forms (check out  <a href="http://npmjs.org/package/formie">formie</a>), provides a comprehensive data-binding ui framework without the baggage of a full framework.</p>
-
-<p><a href="https://github.com/yawetse/bindie/blob/master/doc/api.md">API Documenation</a></p>
-
-<h2>
-<a id="example" class="anchor" href="#example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example</h2>
-
-<p>Check out <code>example/index.html</code>, the example javascript for the example page is <code>resources/js/example_src.js</code></p>
-
-<h2>
-<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
-
-<pre><code>$ npm install bindie
-</code></pre>
-
-<p>Binde is a browserified/commonjs javascript module.</p>
-
-<h2>
-<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
-
-<p><em>JavaScript</em></p>
-
-<div class="highlight highlight-javascript"><pre><span class="pl-s">var</span> Bindie <span class="pl-k">=</span> <span class="pl-s3">require</span>(<span class="pl-s1"><span class="pl-pds">'</span>bindie<span class="pl-pds">'</span></span>),
-    myBindie;
-
-<span class="pl-s">var</span> <span class="pl-en">updateBindieData</span> <span class="pl-k">=</span> <span class="pl-st">function</span>(){
-  bindie1.update({
-    data<span class="pl-k">:</span> {
-      field1<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">"</span>field1 data, probably from database<span class="pl-pds">"</span></span>,
-      field2<span class="pl-k">:</span> {
-        field2html<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">"</span>&lt;h2&gt;field2&lt;/h2&gt;&lt;p&gt;by default this uses EJS, you can use whatever template language you want&lt;/p&gt;<span class="pl-pds">"</span></span>
-      }
-    }
-  });
-};
-
-<span class="pl-c">//initialize nav component after the dom has loaded</span>
-<span class="pl-s3">window</span>.addEventListener(<span class="pl-s1"><span class="pl-pds">'</span>load<span class="pl-pds">'</span></span>,<span class="pl-st">function</span>(){
-    <span class="pl-s">var</span> tabelement <span class="pl-k">=</span> <span class="pl-s3">document</span>.<span class="pl-s3">getElementById</span>(<span class="pl-s1"><span class="pl-pds">'</span>tabs<span class="pl-pds">'</span></span>);
-    myBindie <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Bindie</span>();
-  myBindie.addBinder({
-    prop<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>field1<span class="pl-pds">'</span></span>,
-    elementSelector<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>#field1<span class="pl-pds">'</span></span>,
-    binderType<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>value<span class="pl-pds">'</span></span>
-  });
-  myBindie.addBinder({
-    prop<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>field2<span class="pl-pds">'</span></span>,
-    elementSelector<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>#field2<span class="pl-pds">'</span></span>,
-    binderType<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>template<span class="pl-pds">'</span></span>,
-    binderTemplate<span class="pl-k">:</span> <span class="pl-s3">document</span>.querySelector(<span class="pl-s1"><span class="pl-pds">'</span>#field2-template<span class="pl-pds">'</span></span>).innerHTML
-  });
-    <span class="pl-c">//expose your nav component to the window global namespace</span>
-    <span class="pl-s3">window</span>.myBindie <span class="pl-k">=</span> myBindie;
-  updateBindieData();
-});</pre></div>
-
-<p><em>HTML</em></p>
-
-<div class="highlight highlight-html"><pre>&lt;<span class="pl-ent">html</span>&gt;
-    &lt;<span class="pl-ent">head</span>&gt;
-    &lt;<span class="pl-ent">title</span>&gt;Your Page&lt;/<span class="pl-ent">title</span>&gt;
-<span class="pl-s2">    &lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s1"><span class="pl-pds">'</span>[path/to/browserify/bundle].js<span class="pl-pds">'</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</span>
-    &lt;/<span class="pl-ent">head</span>&gt;
-    &lt;<span class="pl-ent">body</span>&gt;
-    &lt;<span class="pl-ent">section</span>&gt;
-      &lt;<span class="pl-ent">label</span> <span class="pl-e">for</span>=<span class="pl-s1"><span class="pl-pds">"</span>field1<span class="pl-pds">"</span></span>&gt;Field 1&lt;/<span class="pl-ent">label</span>&gt;
-      &lt;<span class="pl-ent">input</span> <span class="pl-e">type</span>=<span class="pl-s1"><span class="pl-pds">"</span>text<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s1"><span class="pl-pds">"</span><span class="pl-pds">"</span></span> <span class="pl-e">name</span>=<span class="pl-s1"><span class="pl-pds">"</span>field1<span class="pl-pds">"</span></span> <span class="pl-e">id</span>=<span class="pl-s1"><span class="pl-pds">"</span>field1<span class="pl-pds">"</span></span> /&gt;
-    &lt;/<span class="pl-ent">section</span>&gt;
-    &lt;<span class="pl-ent">section</span>&gt;
-      &lt;<span class="pl-ent">label</span> <span class="pl-e">for</span>=<span class="pl-s1"><span class="pl-pds">"</span>field2<span class="pl-pds">"</span></span>&gt;Field 2&lt;/<span class="pl-ent">label</span>&gt;
-      &lt;<span class="pl-ent">div</span> <span class="pl-e">id</span>=<span class="pl-s1"><span class="pl-pds">"</span>field2<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">div</span>&gt;
-    &lt;/<span class="pl-ent">section</span>&gt;
-
-    &lt;<span class="pl-ent">script</span> <span class="pl-e">id</span>=<span class="pl-s1"><span class="pl-pds">"</span>field2-template<span class="pl-pds">"</span></span> <span class="pl-e">type</span>=<span class="pl-s1"><span class="pl-pds">"</span>text/template<span class="pl-pds">"</span></span>&gt;
-      &lt;<span class="pl-ent">div</span>&gt;
-          {{- field2html }}
-      &lt;/<span class="pl-ent">div</span>&gt;
-    &lt;/<span class="pl-ent">script</span>&gt;
-    &lt;/<span class="pl-ent">body</span>&gt;
-&lt;/<span class="pl-ent">html</span>&gt;</pre></div>
-
-<h2>
-<a id="api" class="anchor" href="#api" aria-hidden="true"><span class="octicon octicon-link"></span></a>API</h2>
-
-<div class="highlight highlight-javascript"><pre><span class="pl-c">//bind UI elements to JSON from AJAX response</span>
-myBindie.update({
-  data<span class="pl-k">:</span>responsefromajax
-}); 
-
-<span class="pl-c">//bind UI elements to JSON from AJAX response</span>
-myBindie.addBinder({
-  elementSelector<span class="pl-k">:</span>responsefromajax,
-  binderType<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">'</span>value<span class="pl-pds">'</span></span> <span class="pl-k">||</span> <span class="pl-s1"><span class="pl-pds">'</span>innerHTML<span class="pl-pds">'</span></span> <span class="pl-k">||</span> <span class="pl-s1"><span class="pl-pds">'</span>template<span class="pl-pds">'</span></span>,
-  binderTemplate<span class="pl-k">:</span> <span class="pl-s3">document</span>.querySelector(<span class="pl-s1"><span class="pl-pds">'</span>#templatehtml<span class="pl-pds">'</span></span>).innerHTML
-}); 
-
-<span class="pl-c">//events</span>
-myBindie.on(<span class="pl-s1"><span class="pl-pds">'</span>addedBinder<span class="pl-pds">'</span></span>,callback); <span class="pl-c">// callback(binder)</span>
-myBindie.on(<span class="pl-s1"><span class="pl-pds">'</span>renderedBinder<span class="pl-pds">'</span></span>,callback); <span class="pl-c">// callback(data)</span>
-myBindie.on(<span class="pl-s1"><span class="pl-pds">'</span>updatedBindie<span class="pl-pds">'</span></span>,callback); <span class="pl-c">// callback(data)</span></pre></div>
-
-<h2>
-<a id="development" class="anchor" href="#development" aria-hidden="true"><span class="octicon octicon-link"></span></a>Development</h2>
-
-<p><em>Make sure you have grunt installed</em></p>
-
-<pre><code>$ npm install -g grunt-cli
-</code></pre>
-
-<p>Then run grunt watch</p>
-
-<pre><code>$ grunt watch
-</code></pre>
-
-<h2>
-<a id="for-generating-documentation" class="anchor" href="#for-generating-documentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>For generating documentation</h2>
-
-<pre><code>$ grunt doc
-$ jsdoc2md lib/**/*.js index.js &gt; doc/api.md
-</code></pre>
-
-<h2>
-<a id="notes" class="anchor" href="#notes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Notes</h2>
-
-<ul>
-<li>The Tab Module uses Node's event Emitter for event handling.</li>
-<li>The Template Generator uses EJS, but you can generate your own mark up</li>
-</ul>
-      </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/yawetse">yawetse</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
+      <form>
+        <section>
+          <label for="username">Username</label>
+          <input class="label-data" type="text" value="" name="username" id="username" />
+        </section>
+        <section>
+          <label>Profile</label>
+          <div class="label-data" id="profile"></div>
+        </section>
+      </form>
     </div>
-    <script src="javascripts/scale.fix.js"></script>
-    
-  </body>
+    <script id="profile-template" type="text/template">
+  <div>
+    <section>
+      {{- summary }}
+    </section>
+  </div>
+</script>
+  </div>
+  <script>
+  (function(i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r;
+    i[r] = i[r] || function() {
+      (i[r].q = i[r].q || []).push(arguments)
+    }, i[r].l = 1 * new Date();
+    a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0];
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m)
+  })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+  ga('create', 'UA-52892914-6', 'auto');
+  ga('send', 'pageview');
+  </script>
+</body>
+
 </html>
