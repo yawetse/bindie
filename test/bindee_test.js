@@ -1,8 +1,8 @@
 /*
  * bindee
- * https://github.com/condenast
+ * https://github.com/yawetse/bindee
  *
- * Copyright (c) 2013 Condé Nast. All rights reserved.
+ * Copyright (c) 2014 Yaw Joseph Etse. All rights reserved.
  */
 
 'use strict';
