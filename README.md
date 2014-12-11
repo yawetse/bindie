@@ -94,6 +94,11 @@ Then run grunt watch
 ```
 $ grunt watch
 ```
+##For generating documentation
+```
+$ grunt doc
+$ jsdoc2md lib/**/*.js index.js > doc/api.md
+```
 
 ##Notes
 * The Tab Module uses Node's event Emitter for event handling.

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: componentTabs</title>
+    <title>JSDoc: Class: bindie</title>
     
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Class: componentTabs</h1>
+    <h1 class="page-title">Class: bindie</h1>
     
     
 
@@ -27,7 +27,7 @@
     
 <header>
     <h2>
-    componentTabs
+    bindie
     </h2>
     
 </header>  
@@ -39,7 +39,7 @@
     
         
 <dt>
-    <h4 class="name" id="componentTabs"><span class="type-signature"></span>new componentTabs<span class="signature">(el, options)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="bindie"><span class="type-signature"></span>new bindie<span class="signature">(el, options)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -47,7 +47,7 @@
     
     
     <div class="description">
-        <p>A module that represents a componentTabs object, a componentTab is a page composition tool.</p>
+        <p>A module that represents a bindie object, a componentTab is a page composition tool.</p>
     </div>
     
 
@@ -164,7 +164,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="bindee.js.html">bindee.js</a>, <a href="bindee.js.html#line14">line 14</a>
+        <a href="bindie.js.html">bindie.js</a>, <a href="bindie.js.html#line14">line 14</a>
     </li></ul></dd>
     
     
@@ -200,11 +200,13 @@
         <h3 class="subsection-title">Requires</h3>
         
         <ul>
-            <li>module:util-extent</li>
-        
-            <li>module:util</li>
+            <li>module:ejs</li>
         
             <li>module:events</li>
+        
+            <li>module:util-extend</li>
+        
+            <li>module:util</li>
         </ul>
     
     
@@ -213,64 +215,6 @@
     
     
     
-        <h3 class="subsection-title">Members</h3>
-        
-        <dl>
-            
-<dt>
-    <h4 class="name" id="options"><span class="type-signature"></span>options<span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>module default configuration</p>
-    </div>
-    
-    
-    
-
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="bindee.js.html">bindee.js</a>, <a href="bindee.js.html#line40">line 40</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        </dl>
-    
     
     
         <h3 class="subsection-title">Methods</h3>
@@ -278,7 +222,7 @@
         <dl>
             
 <dt>
-    <h4 class="name" id="_init"><span class="type-signature"></span>_init<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="_addBinder"><span class="type-signature"></span>_addBinder<span class="signature">(options)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -286,150 +230,7 @@
     
     
     <div class="description">
-        <p>initializes tabs and shows current tab.</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="bindee.js.html">bindee.js</a>, <a href="bindee.js.html#line51">line 51</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-    <h5>Fires:</h5>
-    <ul>
-        <li>event:tabsInitialized</li>
-    </ul>
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="_initEvents"><span class="type-signature"></span>_initEvents<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>handle tab click events.</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="bindee.js.html">bindee.js</a>, <a href="bindee.js.html#line71">line 71</a>
-    </li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="_show"><span class="type-signature"></span>_show<span class="signature">(idx)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Sets up a new lintotype component.</p>
+        <p>adds a data property binding to an html element selector</p>
     </div>
     
 
@@ -463,13 +264,13 @@
 	
         <tr>
             
-                <td class="name"><code>idx</code></td>
+                <td class="name"><code>options</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">object</span>
 
 
             
@@ -479,7 +280,7 @@
             
             
             
-            <td class="description last"><p>tab to show</p></td>
+            <td class="description last"><p>prop,elementSelector,binderType, binderValue, listenerEventArray</p></td>
         </tr>
 	
 	
@@ -510,7 +311,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="bindee.js.html">bindee.js</a>, <a href="bindee.js.html#line87">line 87</a>
+        <a href="bindie.js.html">bindie.js</a>, <a href="bindie.js.html#line51">line 51</a>
     </li></ul></dd>
     
     
@@ -523,10 +324,261 @@
 
     
     
-    <h5>Fires:</h5>
-    <ul>
-        <li>event:tabsShowIndex</li>
-    </ul>
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="_render"><span class="type-signature"></span>_render<span class="signature">(options)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>render element template with new data</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>template, data</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="bindie.js.html">bindie.js</a>, <a href="bindie.js.html#line114">line 114</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <p>rendered html fragment</p>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">string</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="_update"><span class="type-signature"></span>_update<span class="signature">(options)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>this will update your binded elements ui, once your bindie object is updated with new data</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>data</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="bindie.js.html">bindie.js</a>, <a href="bindie.js.html#line76">line 76</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
     
 
     
@@ -556,13 +608,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="componentTabs.html">componentTabs</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="bindie.html">bindie</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Thu Oct 09 2014 17:30:22 GMT-0400 (EDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Thu Dec 11 2014 16:42:03 GMT-0500 (EST)
 </footer>
 
 <script> prettyPrint(); </script>

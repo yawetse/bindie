@@ -57,7 +57,8 @@ window.addEventListener('load', function () {
 	ajaxbutton = document.querySelector('#ajaxbutton');
 
 	bindie1 = new Bindie({
-		// watchers:
+		ejsopen: '{{',
+		ejsclose: '}}'
 	});
 
 	bindie1.addBinder({

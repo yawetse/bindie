@@ -1,0 +1,66 @@
+<html>
+
+<head>
+  <title>Bindie</title>
+  <link rel="stylesheet" type="text/css" href="stylesheets/example.css">
+  <!-- <link rel="stylesheet" type="text/css" href="stylesheets/bindie.css"> -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src='js/example.min.js'></script>
+</head>
+
+<body>
+  <div class="container">
+    <header class="clearfix">
+      <h1>CommonJS/Browserified simple data view binding, without magic</h1>
+      <p>Bindie maps ui elements to a simple data model, when paired with ajax forms, provides a comprehensive data-binding ui framework without the bagaggae of a full framework.</p>
+      </p>
+      <h3>Full API <a href="http://yawetse.github.io/bindie/api/html">documentation</a>
+      </h3>
+
+    </header>
+    <div class="bindie-test">
+      <h1>Bindie Test</h1>
+      <div>
+        <button id="yawbutton">@yaw</button>
+        <button id="rafbutton">@raf</button>
+        <button id="ajaxbutton">@ajax</button>
+      </div>
+      <form>
+        <section>
+          <label for="username">Username</label>
+          <input class="label-data" type="text" value="" name="username" id="username" />
+        </section>
+        <section>
+          <label>Profile</label>
+          <div class="label-data" id="profile"></div>
+        </section>
+      </form>
+    </div>
+    <script id="profile-template" type="text/template">
+  <div>
+    <section>
+      {{- summary }}
+    </section>
+  </div>
+</script>
+  </div>
+  <script>
+  (function(i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r;
+    i[r] = i[r] || function() {
+      (i[r].q = i[r].q || []).push(arguments)
+    }, i[r].l = 1 * new Date();
+    a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0];
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m)
+  })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+  ga('create', 'UA-52892914-6', 'auto');
+  ga('send', 'pageview');
+  </script>
+</body>
+
+</html>

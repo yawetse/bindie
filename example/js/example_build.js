@@ -31,23 +31,23 @@ var extend = require('util-extend'),
  * @copyright Copyright (c) 2014 Typesettin. All rights reserved.
  * @license MIT
  * @constructor bindie
- * @requires module:util-extent
- * @requires module:util
+ * @requires module:ejs
  * @requires module:events
+ * @requires module:util-extend
+ * @requires module:util
  * @param {object} el element of tab container
  * @param {object} options configuration options
  */
 var bindie = function (options) {
 	events.EventEmitter.call(this);
 
-	// // this.el = el;
-	// this.options = extend(defaultOptions, this.options);
-	// extend(this.options, options);
-	// this.watchers = this.options.watchers;
-	// this.data = this.options.data;
-	// // this.showTab = this._show;
-	// // this._init();
-	// 
+	var defaultOptions = {
+		ejsopen: '<%',
+		ejsclose: '%>'
+	};
+	this.options = extend(defaultOptions, options);
+	ejs.open = this.options.ejsopen;
+	ejs.close = this.options.ejsclose;
 
 	this.binders = {};
 	this.update = this._update;
@@ -2044,7 +2044,8 @@ window.addEventListener('load', function () {
 	ajaxbutton = document.querySelector('#ajaxbutton');
 
 	bindie1 = new Bindie({
-		// watchers:
+		ejsopen: '{{',
+		ejsclose: '}}'
 	});
 
 	bindie1.addBinder({
