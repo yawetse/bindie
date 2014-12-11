@@ -67,14 +67,9 @@ bindie.prototype._addBinder = function (options) {
 		this.binders[options.prop] = {
 			binder_el_selector: options.elementSelector,
 			binder_type: options.binderType || 'value',
-			binder_template: options.binderTemplate, // || 'value',
-			binder_listeners: options.listenerEventArray // || ['change']
+			binder_template: options.binderTemplate
 		};
 
-		// var eventlistenertypes = this.binders[options.prop].binder_listeners;
-		// for(x in eventlistenertypes){
-		// 	el.addEventListener([eventlistenertypes[x]],this.,false);
-		// }
 		this.emit('addedBinder', this.binders[options.prop]);
 	}
 	catch (e) {
@@ -2002,7 +1997,7 @@ var yawprofiledata = {
 	rafprofiledata = {
 		username: "@sonicsound",
 		profile: {
-			summary: "<h2>@sonicsound's profile</h2><p>probably you can overwrite render function with own template language from database</p>"
+			summary: "<h2>@sonicsound's profile</h2><p>you can overwrite Bindie's  render prototype function to use your favorite own template language. The default is EJS</p>"
 		}
 	},
 	ajaxprofiledata = {
@@ -2041,7 +2036,7 @@ window.addEventListener('load', function () {
 
 	yawbutton = document.querySelector('#yawbutton');
 	rafbutton = document.querySelector('#rafbutton');
-	ajaxbutton = document.querySelector('#ajaxbutton');
+	// ajaxbutton = document.querySelector('#ajaxbutton');
 
 	bindie1 = new Bindie({
 		ejsopen: '{{',
@@ -2063,7 +2058,7 @@ window.addEventListener('load', function () {
 
 	yawbutton.addEventListener('click', loadprofile, false);
 	rafbutton.addEventListener('click', loadprofile, false);
-	ajaxbutton.addEventListener('click', loadprofile, false);
+	// ajaxbutton.addEventListener('click', loadprofile, false);
 	window.bindie1 = bindie1;
 }, false);
 

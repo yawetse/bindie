@@ -1,13 +1,10 @@
-bindie
-======
-
-A quick way to bind model changes to a view
-
-
 # bindie
 
-100% width tabbed content with some example media queries for smaller screens.
- Inspired by [Responsive full width tabs](http://tympanus.net/codrops/2014/03/21/responsive-full-width-tabs/)
+** CommonJS/Browserified simple data view binding, without magic **
+
+Bindie maps UI elements to a bindie object. This is a quick and simple vanilla JS way to data bind element. 
+
+When paired with ajax forms (check out  [formie](http://npmjs.org/package/formie)), provides a comprehensive data-binding ui framework without the baggage of a full framework.</p>
 
  [API Documenation](https://github.com/typesettin/bindie/blob/master/doc/api.md)
 
@@ -18,23 +15,47 @@ Check out `example/index.html`, the example javascript for the example page is `
 ## Installation
 
 ```
-$ npm install periodicjs.bindie
+$ npm install bindie
 ```
 
-The tab component is a browserify javascript module.
+Binde is a browserified/commonjs javascript module.
 
 ## Usage
 
 *JavaScript*
 ```javascript
-var ComponentTabs = require('periodicjs.bindie'),
-	myTabs;
+var Bindie = require('bindie'),
+	myBindie;
+
+var updateBindieData = function(){
+  bindie1.update({
+    data: {
+      field1: "field1 data, probably from database",
+      field2: {
+        field2html: "<h2>field2</h2><p>by default this uses EJS, you can use whatever template language you want</p>"
+      }
+    }
+  });
+};
+
 //initialize nav component after the dom has loaded
 window.addEventListener('load',function(){
 	var tabelement = document.getElementById('tabs');
-	myTabs = new ComponentTabs(tabelement);
+	myBindie = new Bindie();
+  myBindie.addBinder({
+    prop: 'field1',
+    elementSelector: '#field1',
+    binderType: 'value'
+  });
+  myBindie.addBinder({
+    prop: 'field2',
+    elementSelector: '#field2',
+    binderType: 'template',
+    binderTemplate: document.querySelector('#field2-template').innerHTML
+  });
 	//expose your nav component to the window global namespace
-	window.myNav = myNav;
+	window.myBindie = myBindie;
+  updateBindieData();
 });
 ```
 
@@ -43,38 +64,23 @@ window.addEventListener('load',function(){
 <html>
 	<head>
   	<title>Your Page</title>
-  	<link rel="stylesheet" type="text/css" href="[path/to]/bindie.css">
   	<script src='[path/to/browserify/bundle].js'></script>
 	</head>
 	<body>
-		 <div id="tabs" class="tabs">
-      <nav>
-        <ul>
-          <li>
-            tab1
-          </li>
-          <li>
-            tab2
-          </li>
-          <li>
-            tab3
-          </li>
-        </ul>
-      </nav>
-      <div class="content">
-        <section id="section-1">
-          any html
-        </section>
-        <section id="section-2">
-          can go in here
-        </section>
-        <section id="section-3">
-          this is fully responsive
-        </section>
+    <section>
+      <label for="field1">Field 1</label>
+      <input type="text" value="" name="field1" id="field1" />
+    </section>
+    <section>
+      <label for="field2">Field 2</label>
+      <div id="field2"></div>
+    </section>
+
+    <script id="field2-template" type="text/template">
+      <div>
+          {{- field2html }}
       </div>
-      <!-- /content -->
-    </div>
-    <!-- /tabs -->
+    </script>
 	</body>
 </html>
 ```
@@ -82,7 +88,22 @@ window.addEventListener('load',function(){
 ##API
 
 ```javascript
-myNav.showTab(1); //show tab at index '1'
+//bind UI elements to JSON from AJAX response
+myBindie.update({
+  data:responsefromajax
+}); 
+
+//bind UI elements to JSON from AJAX response
+myBindie.addBinder({
+  elementSelector:responsefromajax,
+  binderType: 'value' || 'innerHTML' || 'template',
+  binderTemplate: document.querySelector('#templatehtml').innerHTML
+}); 
+
+//events
+myBindie.on('addedBinder',callback); // callback(binder)
+myBindie.on('renderedBinder',callback); // callback(data)
+myBindie.on('updatedBindie',callback); // callback(data)
 ```
 ##Development
 *Make sure you have grunt installed*
@@ -103,4 +124,3 @@ $ jsdoc2md lib/**/*.js index.js > doc/api.md
 ##Notes
 * The Tab Module uses Node's event Emitter for event handling.
 * The Template Generator uses EJS, but you can generate your own mark up
-* The less file is located in `resources/stylesheets`

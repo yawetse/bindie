@@ -15,7 +15,7 @@ var yawprofiledata = {
 	rafprofiledata = {
 		username: "@sonicsound",
 		profile: {
-			summary: "<h2>@sonicsound's profile</h2><p>probably you can overwrite render function with own template language from database</p>"
+			summary: "<h2>@sonicsound's profile</h2><p>you can overwrite Bindie's  render prototype function to use your favorite own template language. The default is EJS</p>"
 		}
 	},
 	ajaxprofiledata = {
@@ -54,7 +54,7 @@ window.addEventListener('load', function () {
 
 	yawbutton = document.querySelector('#yawbutton');
 	rafbutton = document.querySelector('#rafbutton');
-	ajaxbutton = document.querySelector('#ajaxbutton');
+	// ajaxbutton = document.querySelector('#ajaxbutton');
 
 	bindie1 = new Bindie({
 		ejsopen: '{{',
@@ -76,6 +76,6 @@ window.addEventListener('load', function () {
 
 	yawbutton.addEventListener('click', loadprofile, false);
 	rafbutton.addEventListener('click', loadprofile, false);
-	ajaxbutton.addEventListener('click', loadprofile, false);
+	// ajaxbutton.addEventListener('click', loadprofile, false);
 	window.bindie1 = bindie1;
 }, false);

@@ -29,10 +29,24 @@ header{
 	border-bottom: 1px solid @documentation_blue;
 }
 
+button{
+	font-size:120%;
+	padding: .5em;
+}
+
 .container{
 	margin:3em;
 	max-width: 40em;
-
+	h1{
+		small{
+			font-size:50%;
+			button{
+				margin: 0 .5em;
+				cursor: pointer;
+				float: right;
+			}
+		}
+	}
 	form{
 		.clearfix;
 		& > section{
