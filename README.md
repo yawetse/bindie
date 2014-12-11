@@ -2,7 +2,7 @@
 
 ** CommonJS/Browserified simple data view binding, without magic **
 
-Bindie maps UI elements to a bindie object. This is a quick and simple vanilla JS way to data bind element. 
+This is a quick and light weight vanilla JS way to data bind UI elements. 
 
 When paired with ajax forms (check out  [formie](http://npmjs.org/package/formie)), provides a comprehensive data-binding ui framework without the baggage of a full framework.</p>
 
