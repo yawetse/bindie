@@ -1,15 +1,15 @@
-bindee
+bindie
 ======
 
 A quick way to bind model changes to a view
 
 
-# bindee
+# bindie
 
 100% width tabbed content with some example media queries for smaller screens.
  Inspired by [Responsive full width tabs](http://tympanus.net/codrops/2014/03/21/responsive-full-width-tabs/)
 
- [API Documenation](https://github.com/typesettin/bindee/blob/master/doc/api.md)
+ [API Documenation](https://github.com/typesettin/bindie/blob/master/doc/api.md)
 
 ## Example
 
@@ -18,7 +18,7 @@ Check out `example/index.html`, the example javascript for the example page is `
 ## Installation
 
 ```
-$ npm install periodicjs.bindee
+$ npm install periodicjs.bindie
 ```
 
 The tab component is a browserify javascript module.
@@ -27,7 +27,7 @@ The tab component is a browserify javascript module.
 
 *JavaScript*
 ```javascript
-var ComponentTabs = require('periodicjs.bindee'),
+var ComponentTabs = require('periodicjs.bindie'),
 	myTabs;
 //initialize nav component after the dom has loaded
 window.addEventListener('load',function(){
@@ -43,7 +43,7 @@ window.addEventListener('load',function(){
 <html>
 	<head>
   	<title>Your Page</title>
-  	<link rel="stylesheet" type="text/css" href="[path/to]/bindee.css">
+  	<link rel="stylesheet" type="text/css" href="[path/to]/bindie.css">
   	<script src='[path/to/browserify/bundle].js'></script>
 	</head>
 	<body>

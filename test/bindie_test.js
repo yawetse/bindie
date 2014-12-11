@@ -1,6 +1,6 @@
 /*
- * bindee
- * https://github.com/yawetse/bindee
+ * bindie
+ * https://github.com/yawetse/bindie
  *
  * Copyright (c) 2014 Yaw Joseph Etse. All rights reserved.
  */
@@ -8,9 +8,9 @@
 'use strict';
 
 var should = require('chai').should();
-// var component_navigation_header = require('../lib/bindee');
+// var component_navigation_header = require('../lib/bindie');
 
-describe('bindee', function () {
+describe('bindie', function () {
 	describe('#indexOf()', function () {
 		it('should return -1 when the value is not present', function () {
 			should.equal(-1, [1, 2, 3].indexOf(5));

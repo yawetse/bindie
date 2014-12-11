@@ -1,6 +1,6 @@
 /*
- * bindee
- * http://github.com/typesettin/bindee
+ * bindie
+ * http://github.com/yawetse/bindie
  *
  * Copyright (c) 2014 Yaw Joseph Etse. All rights reserved.
  */
@@ -36,7 +36,7 @@ module.exports = function (grunt) {
 			]
 		},
 		jsbeautifier: {
-			files: ['<%= jshint.all %>', '!resources/template/component_tabs.ejs'],
+			files: ['<%= jshint.all %>', '!resources/template/bindie.ejs'],
 			options: {
 				config: '.jsbeautify'
 			}
@@ -106,7 +106,7 @@ module.exports = function (grunt) {
 					compress: true
 				},
 				files: {
-					'example/stylesheets/bindee.css': 'resources/stylesheets/bindee.less',
+					'example/stylesheets/bindie.css': 'resources/stylesheets/bindie.less',
 					'example/stylesheets/example.css': 'resources/stylesheets/example.less'
 				}
 			}

@@ -1,209 +1,737 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /*
- * bindee
- * http://github.amexpub.com/modules/bindee
+ * bindie
+ * http://github.amexpub.com/modules/bindie
  *
  * Copyright (c) 2013 AmexPub. All rights reserved.
  */
 
 'use strict';
 
-module.exports = require('./lib/bindee');
+module.exports = require('./lib/bindie');
 
-},{"./lib/bindee":2}],2:[function(require,module,exports){
+},{"./lib/bindie":2}],2:[function(require,module,exports){
 /*
- * bindee
- * http://github.com/yawetse/bindee
+ * bindie
+ * http://github.com/yawetse/bindie
  *
  * Copyright (c) 2014 Yaw Joseph Etse. All rights reserved.
  */
 'use strict';
 
 var extend = require('util-extend'),
-	classie = require('classie'),
+	ejs = require('ejs'),
 	events = require('events'),
 	util = require('util');
 
 /**
- * A module that represents a bindee object, a componentTab is a page composition tool.
- * @{@link https://github.com/typesettin/bindee}
+ * A module that represents a bindie object, a componentTab is a page composition tool.
+ * @{@link https://github.com/typesettin/bindie}
  * @author Yaw Joseph Etse
  * @copyright Copyright (c) 2014 Typesettin. All rights reserved.
  * @license MIT
- * @constructor bindee
+ * @constructor bindie
  * @requires module:util-extent
  * @requires module:util
  * @requires module:events
  * @param {object} el element of tab container
  * @param {object} options configuration options
  */
-var bindee = function (el, options) {
+var bindie = function (options) {
 	events.EventEmitter.call(this);
 
-	this.el = el;
-	this.options = extend({}, this.options);
-	extend(this.options, options);
-	this.showTab = this._show;
-	this._init();
+	// // this.el = el;
+	// this.options = extend(defaultOptions, this.options);
+	// extend(this.options, options);
+	// this.watchers = this.options.watchers;
+	// this.data = this.options.data;
+	// // this.showTab = this._show;
+	// // this._init();
+	// 
+
+	this.binders = {};
+	this.update = this._update;
+	this.render = this._render;
+	this.addBinder = this._addBinder;
 };
 
-util.inherits(bindee, events.EventEmitter);
+util.inherits(bindie, events.EventEmitter);
 
-/** module default configuration */
-bindee.prototype.options = {
-	start: 0,
-	tabselector: 'nav > ul > li',
-	itemselector: '.content > section',
-	currenttabclass: 'tab-current',
-	currentitemclass: 'content-current'
-};
 /**
- * initializes tabs and shows current tab.
- * @emits tabsInitialized
+ * adds a data property binding to an html element selector
+ * @param {object} options prop,elementSelector,binderType, binderValue, listenerEventArray
  */
-bindee.prototype._init = function () {
-	// tabs elemes
-	this.tabs = [].slice.call(this.el.querySelectorAll(this.options.tabselector));
-	// content items
-	this.items = [].slice.call(this.el.querySelectorAll(this.options.itemselector));
-	// current index
-	this.current = -1;
-	// show current content item
-	this._show();
-	// init events
-	this._initEvents();
-	if (this.options.callback) {
-		this.options.callback();
+bindie.prototype._addBinder = function (options) {
+	try {
+		var el = document.querySelector(options.elementSelector);
+		this.binders[options.prop] = {
+			binder_el_selector: options.elementSelector,
+			binder_type: options.binderType || 'value',
+			binder_template: options.binderTemplate, // || 'value',
+			binder_listeners: options.listenerEventArray // || ['change']
+		};
+
+		// var eventlistenertypes = this.binders[options.prop].binder_listeners;
+		// for(x in eventlistenertypes){
+		// 	el.addEventListener([eventlistenertypes[x]],this.,false);
+		// }
+		this.emit('addedBinder', this.binders[options.prop]);
 	}
-	this.emit('tabsInitialized');
-
-};
-/**
- * handle tab click events.
- */
-bindee.prototype._initEvents = function () {
-	var self = this;
-
-	this.tabs.forEach(function (tab, idx) {
-		tab.addEventListener('click', function (ev) {
-			ev.preventDefault();
-			self._show(idx);
-		});
-	});
-	this.emit('tabsEventsInitialized');
-};
-/**
- * Sets up a new lintotype component.
- * @param {number} idx tab to show
- * @emits tabsShowIndex
- */
-bindee.prototype._show = function (idx) {
-	if (this.current >= 0) {
-		classie.remove(this.tabs[this.current], this.options.currenttabclass);
-		classie.remove(this.items[this.current], this.options.currentitemclass);
+	catch (e) {
+		throw new Error(e);
 	}
-	// change current
-	this.current = idx !== undefined ? idx : this.options.start >= 0 && this.options.start < this.items.length ? this.options.start : 0;
-	classie.add(this.tabs[this.current], this.options.currenttabclass);
-	classie.add(this.items[this.current], this.options.currentitemclass);
-	this.emit('tabsShowIndex', this.current);
 };
-module.exports = bindee;
 
-},{"classie":3,"events":5,"util":9,"util-extend":10}],3:[function(require,module,exports){
-/*
- * classie
- * http://github.amexpub.com/modules/classie
- *
- * Copyright (c) 2013 AmexPub. All rights reserved.
+/**
+ * this will update your binded elements ui, once your bindie object is updated with new data
+ * @param  {object} options data
  */
+bindie.prototype._update = function (options) {
+	var binder,
+		binderElement,
+		binderData,
+		binderTemplate;
+	try {
+		this.data = options.data;
 
-module.exports = require('./lib/classie');
+		for (var prop in this.data) {
+			binder = this.binders[prop];
+			binderElement = document.querySelector(binder.binder_el_selector);
+			binderData = this.data[prop];
+			binderTemplate = binder.binder_template;
+			if (binder.binder_type === 'value') {
+				binderElement.value = binderData;
+			}
+			else if (binder.binder_type === 'innerHTML') {
+				binderElement.innerHTML = binderData;
+			}
+			else if (binder.binder_type === 'template') {
+				binderElement.innerHTML = this.render({
+					data: binderData,
+					template: binderTemplate
+				});
+			}
+		}
+		this.emit('updatedBindee', options.data);
+	}
+	catch (e) {
+		throw new Error(e);
+	}
+};
 
-},{"./lib/classie":4}],4:[function(require,module,exports){
+/**
+ * render element template with new data
+ * @param  {object} options template, data
+ * @return {string}         rendered html fragment
+ */
+bindie.prototype._render = function (options) {
+	try {
+		var binderhtml = ejs.render(options.template, options.data);
+		this.emit('renderedBinder', options.data);
+		return binderhtml;
+	}
+	catch (e) {
+		throw new Error(e);
+	}
+};
+module.exports = bindie;
+
+},{"ejs":3,"events":7,"util":12,"util-extend":13}],3:[function(require,module,exports){
+
 /*!
- * classie - class helper functions
- * from bonzo https://github.com/ded/bonzo
- * 
- * classie.has( elem, 'my-class' ) -> true/false
- * classie.add( elem, 'my-new-class' )
- * classie.remove( elem, 'my-unwanted-class' )
- * classie.toggle( elem, 'my-class' )
+ * EJS
+ * Copyright(c) 2012 TJ Holowaychuk <tj@vision-media.ca>
+ * MIT Licensed
  */
 
-/*jshint browser: true, strict: true, undef: true */
-/*global define: false */
-'use strict';
+/**
+ * Module dependencies.
+ */
 
-  // class helper functions from bonzo https://github.com/ded/bonzo
+var utils = require('./utils')
+  , path = require('path')
+  , dirname = path.dirname
+  , extname = path.extname
+  , join = path.join
+  , fs = require('fs')
+  , read = fs.readFileSync;
 
-  function classReg( className ) {
-    return new RegExp("(^|\\s+)" + className + "(\\s+|$)");
-  }
+/**
+ * Filters.
+ *
+ * @type Object
+ */
 
-  // classList support for class management
-  // altho to be fair, the api sucks because it won't accept multiple classes at once
-  var hasClass, addClass, removeClass;
+var filters = exports.filters = require('./filters');
 
-  if (typeof document === "object" && 'classList' in document.documentElement ) {
-    hasClass = function( elem, c ) {
-      return elem.classList.contains( c );
-    };
-    addClass = function( elem, c ) {
-      elem.classList.add( c );
-    };
-    removeClass = function( elem, c ) {
-      elem.classList.remove( c );
-    };
-  }
-  else {
-    hasClass = function( elem, c ) {
-      return classReg( c ).test( elem.className );
-    };
-    addClass = function( elem, c ) {
-      if ( !hasClass( elem, c ) ) {
-        elem.className = elem.className + ' ' + c;
+/**
+ * Intermediate js cache.
+ *
+ * @type Object
+ */
+
+var cache = {};
+
+/**
+ * Clear intermediate js cache.
+ *
+ * @api public
+ */
+
+exports.clearCache = function(){
+  cache = {};
+};
+
+/**
+ * Translate filtered code into function calls.
+ *
+ * @param {String} js
+ * @return {String}
+ * @api private
+ */
+
+function filtered(js) {
+  return js.substr(1).split('|').reduce(function(js, filter){
+    var parts = filter.split(':')
+      , name = parts.shift()
+      , args = parts.join(':') || '';
+    if (args) args = ', ' + args;
+    return 'filters.' + name + '(' + js + args + ')';
+  });
+};
+
+/**
+ * Re-throw the given `err` in context to the
+ * `str` of ejs, `filename`, and `lineno`.
+ *
+ * @param {Error} err
+ * @param {String} str
+ * @param {String} filename
+ * @param {String} lineno
+ * @api private
+ */
+
+function rethrow(err, str, filename, lineno){
+  var lines = str.split('\n')
+    , start = Math.max(lineno - 3, 0)
+    , end = Math.min(lines.length, lineno + 3);
+
+  // Error context
+  var context = lines.slice(start, end).map(function(line, i){
+    var curr = i + start + 1;
+    return (curr == lineno ? ' >> ' : '    ')
+      + curr
+      + '| '
+      + line;
+  }).join('\n');
+
+  // Alter exception message
+  err.path = filename;
+  err.message = (filename || 'ejs') + ':'
+    + lineno + '\n'
+    + context + '\n\n'
+    + err.message;
+
+  throw err;
+}
+
+/**
+ * Parse the given `str` of ejs, returning the function body.
+ *
+ * @param {String} str
+ * @return {String}
+ * @api public
+ */
+
+var parse = exports.parse = function(str, options){
+  var options = options || {}
+    , open = options.open || exports.open || '<%'
+    , close = options.close || exports.close || '%>'
+    , filename = options.filename
+    , compileDebug = options.compileDebug !== false
+    , buf = "";
+
+  buf += 'var buf = [];';
+  if (false !== options._with) buf += '\nwith (locals || {}) { (function(){ ';
+  buf += '\n buf.push(\'';
+
+  var lineno = 1;
+
+  var consumeEOL = false;
+  for (var i = 0, len = str.length; i < len; ++i) {
+    var stri = str[i];
+    if (str.slice(i, open.length + i) == open) {
+      i += open.length
+
+      var prefix, postfix, line = (compileDebug ? '__stack.lineno=' : '') + lineno;
+      switch (str[i]) {
+        case '=':
+          prefix = "', escape((" + line + ', ';
+          postfix = ")), '";
+          ++i;
+          break;
+        case '-':
+          prefix = "', (" + line + ', ';
+          postfix = "), '";
+          ++i;
+          break;
+        default:
+          prefix = "');" + line + ';';
+          postfix = "; buf.push('";
       }
-    };
-    removeClass = function( elem, c ) {
-      elem.className = elem.className.replace( classReg( c ), ' ' );
-    };
+
+      var end = str.indexOf(close, i);
+
+      if (end < 0){
+        throw new Error('Could not find matching close tag "' + close + '".');
+      }
+
+      var js = str.substring(i, end)
+        , start = i
+        , include = null
+        , n = 0;
+
+      if ('-' == js[js.length-1]){
+        js = js.substring(0, js.length - 2);
+        consumeEOL = true;
+      }
+
+      if (0 == js.trim().indexOf('include')) {
+        var name = js.trim().slice(7).trim();
+        if (!filename) throw new Error('filename option is required for includes');
+        var path = resolveInclude(name, filename);
+        include = read(path, 'utf8');
+        include = exports.parse(include, { filename: path, _with: false, open: open, close: close, compileDebug: compileDebug });
+        buf += "' + (function(){" + include + "})() + '";
+        js = '';
+      }
+
+      while (~(n = js.indexOf("\n", n))) n++, lineno++;
+      if (js.substr(0, 1) == ':') js = filtered(js);
+      if (js) {
+        if (js.lastIndexOf('//') > js.lastIndexOf('\n')) js += '\n';
+        buf += prefix;
+        buf += js;
+        buf += postfix;
+      }
+      i += end - start + close.length - 1;
+
+    } else if (stri == "\\") {
+      buf += "\\\\";
+    } else if (stri == "'") {
+      buf += "\\'";
+    } else if (stri == "\r") {
+      // ignore
+    } else if (stri == "\n") {
+      if (consumeEOL) {
+        consumeEOL = false;
+      } else {
+        buf += "\\n";
+        lineno++;
+      }
+    } else {
+      buf += stri;
+    }
   }
 
-  function toggleClass( elem, c ) {
-    var fn = hasClass( elem, c ) ? removeClass : addClass;
-    fn( elem, c );
-  }
+  if (false !== options._with) buf += "'); })();\n} \nreturn buf.join('');";
+  else buf += "');\nreturn buf.join('');";
+  return buf;
+};
 
-  var classie = {
-    // full names
-    hasClass: hasClass,
-    addClass: addClass,
-    removeClass: removeClass,
-    toggleClass: toggleClass,
-    // short names
-    has: hasClass,
-    add: addClass,
-    remove: removeClass,
-    toggle: toggleClass
-  };
+/**
+ * Compile the given `str` of ejs into a `Function`.
+ *
+ * @param {String} str
+ * @param {Object} options
+ * @return {Function}
+ * @api public
+ */
 
-  // transport
+var compile = exports.compile = function(str, options){
+  options = options || {};
+  var escape = options.escape || utils.escape;
 
-  if ( typeof module === "object" && module && typeof module.exports === "object" ) {
-    // commonjs / browserify
-    module.exports = classie;
+  var input = JSON.stringify(str)
+    , compileDebug = options.compileDebug !== false
+    , client = options.client
+    , filename = options.filename
+        ? JSON.stringify(options.filename)
+        : 'undefined';
+
+  if (compileDebug) {
+    // Adds the fancy stack trace meta info
+    str = [
+      'var __stack = { lineno: 1, input: ' + input + ', filename: ' + filename + ' };',
+      rethrow.toString(),
+      'try {',
+      exports.parse(str, options),
+      '} catch (err) {',
+      '  rethrow(err, __stack.input, __stack.filename, __stack.lineno);',
+      '}'
+    ].join("\n");
   } else {
-    // AMD
-    define(classie);
+    str = exports.parse(str, options);
   }
 
-  // If there is a window object, that at least has a document property,
-  // define classie
-  if ( typeof window === "object" && typeof window.document === "object" ) {
-    window.classie = classie;
+  if (options.debug) console.log(str);
+  if (client) str = 'escape = escape || ' + escape.toString() + ';\n' + str;
+
+  try {
+    var fn = new Function('locals, filters, escape, rethrow', str);
+  } catch (err) {
+    if ('SyntaxError' == err.name) {
+      err.message += options.filename
+        ? ' in ' + filename
+        : ' while compiling ejs';
+    }
+    throw err;
   }
+
+  if (client) return fn;
+
+  return function(locals){
+    return fn.call(this, locals, filters, escape, rethrow);
+  }
+};
+
+/**
+ * Render the given `str` of ejs.
+ *
+ * Options:
+ *
+ *   - `locals`          Local variables object
+ *   - `cache`           Compiled functions are cached, requires `filename`
+ *   - `filename`        Used by `cache` to key caches
+ *   - `scope`           Function execution context
+ *   - `debug`           Output generated function body
+ *   - `open`            Open tag, defaulting to "<%"
+ *   - `close`           Closing tag, defaulting to "%>"
+ *
+ * @param {String} str
+ * @param {Object} options
+ * @return {String}
+ * @api public
+ */
+
+exports.render = function(str, options){
+  var fn
+    , options = options || {};
+
+  if (options.cache) {
+    if (options.filename) {
+      fn = cache[options.filename] || (cache[options.filename] = compile(str, options));
+    } else {
+      throw new Error('"cache" option requires "filename".');
+    }
+  } else {
+    fn = compile(str, options);
+  }
+
+  options.__proto__ = options.locals;
+  return fn.call(options.scope, options);
+};
+
+/**
+ * Render an EJS file at the given `path` and callback `fn(err, str)`.
+ *
+ * @param {String} path
+ * @param {Object|Function} options or callback
+ * @param {Function} fn
+ * @api public
+ */
+
+exports.renderFile = function(path, options, fn){
+  var key = path + ':string';
+
+  if ('function' == typeof options) {
+    fn = options, options = {};
+  }
+
+  options.filename = path;
+
+  var str;
+  try {
+    str = options.cache
+      ? cache[key] || (cache[key] = read(path, 'utf8'))
+      : read(path, 'utf8');
+  } catch (err) {
+    fn(err);
+    return;
+  }
+  fn(null, exports.render(str, options));
+};
+
+/**
+ * Resolve include `name` relative to `filename`.
+ *
+ * @param {String} name
+ * @param {String} filename
+ * @return {String}
+ * @api private
+ */
+
+function resolveInclude(name, filename) {
+  var path = join(dirname(filename), name);
+  var ext = extname(name);
+  if (!ext) path += '.ejs';
+  return path;
+}
+
+// express support
+
+exports.__express = exports.renderFile;
+
+/**
+ * Expose to require().
+ */
+
+if (require.extensions) {
+  require.extensions['.ejs'] = function (module, filename) {
+    filename = filename || module.filename;
+    var options = { filename: filename, client: true }
+      , template = fs.readFileSync(filename).toString()
+      , fn = compile(template, options);
+    module._compile('module.exports = ' + fn.toString() + ';', filename);
+  };
+} else if (require.registerExtension) {
+  require.registerExtension('.ejs', function(src) {
+    return compile(src, {});
+  });
+}
+
+},{"./filters":4,"./utils":5,"fs":6,"path":9}],4:[function(require,module,exports){
+/*!
+ * EJS - Filters
+ * Copyright(c) 2010 TJ Holowaychuk <tj@vision-media.ca>
+ * MIT Licensed
+ */
+
+/**
+ * First element of the target `obj`.
+ */
+
+exports.first = function(obj) {
+  return obj[0];
+};
+
+/**
+ * Last element of the target `obj`.
+ */
+
+exports.last = function(obj) {
+  return obj[obj.length - 1];
+};
+
+/**
+ * Capitalize the first letter of the target `str`.
+ */
+
+exports.capitalize = function(str){
+  str = String(str);
+  return str[0].toUpperCase() + str.substr(1, str.length);
+};
+
+/**
+ * Downcase the target `str`.
+ */
+
+exports.downcase = function(str){
+  return String(str).toLowerCase();
+};
+
+/**
+ * Uppercase the target `str`.
+ */
+
+exports.upcase = function(str){
+  return String(str).toUpperCase();
+};
+
+/**
+ * Sort the target `obj`.
+ */
+
+exports.sort = function(obj){
+  return Object.create(obj).sort();
+};
+
+/**
+ * Sort the target `obj` by the given `prop` ascending.
+ */
+
+exports.sort_by = function(obj, prop){
+  return Object.create(obj).sort(function(a, b){
+    a = a[prop], b = b[prop];
+    if (a > b) return 1;
+    if (a < b) return -1;
+    return 0;
+  });
+};
+
+/**
+ * Size or length of the target `obj`.
+ */
+
+exports.size = exports.length = function(obj) {
+  return obj.length;
+};
+
+/**
+ * Add `a` and `b`.
+ */
+
+exports.plus = function(a, b){
+  return Number(a) + Number(b);
+};
+
+/**
+ * Subtract `b` from `a`.
+ */
+
+exports.minus = function(a, b){
+  return Number(a) - Number(b);
+};
+
+/**
+ * Multiply `a` by `b`.
+ */
+
+exports.times = function(a, b){
+  return Number(a) * Number(b);
+};
+
+/**
+ * Divide `a` by `b`.
+ */
+
+exports.divided_by = function(a, b){
+  return Number(a) / Number(b);
+};
+
+/**
+ * Join `obj` with the given `str`.
+ */
+
+exports.join = function(obj, str){
+  return obj.join(str || ', ');
+};
+
+/**
+ * Truncate `str` to `len`.
+ */
+
+exports.truncate = function(str, len, append){
+  str = String(str);
+  if (str.length > len) {
+    str = str.slice(0, len);
+    if (append) str += append;
+  }
+  return str;
+};
+
+/**
+ * Truncate `str` to `n` words.
+ */
+
+exports.truncate_words = function(str, n){
+  var str = String(str)
+    , words = str.split(/ +/);
+  return words.slice(0, n).join(' ');
+};
+
+/**
+ * Replace `pattern` with `substitution` in `str`.
+ */
+
+exports.replace = function(str, pattern, substitution){
+  return String(str).replace(pattern, substitution || '');
+};
+
+/**
+ * Prepend `val` to `obj`.
+ */
+
+exports.prepend = function(obj, val){
+  return Array.isArray(obj)
+    ? [val].concat(obj)
+    : val + obj;
+};
+
+/**
+ * Append `val` to `obj`.
+ */
+
+exports.append = function(obj, val){
+  return Array.isArray(obj)
+    ? obj.concat(val)
+    : obj + val;
+};
+
+/**
+ * Map the given `prop`.
+ */
+
+exports.map = function(arr, prop){
+  return arr.map(function(obj){
+    return obj[prop];
+  });
+};
+
+/**
+ * Reverse the given `obj`.
+ */
+
+exports.reverse = function(obj){
+  return Array.isArray(obj)
+    ? obj.reverse()
+    : String(obj).split('').reverse().join('');
+};
+
+/**
+ * Get `prop` of the given `obj`.
+ */
+
+exports.get = function(obj, prop){
+  return obj[prop];
+};
+
+/**
+ * Packs the given `obj` into json string
+ */
+exports.json = function(obj){
+  return JSON.stringify(obj);
+};
+
 },{}],5:[function(require,module,exports){
+
+/*!
+ * EJS
+ * Copyright(c) 2010 TJ Holowaychuk <tj@vision-media.ca>
+ * MIT Licensed
+ */
+
+/**
+ * Escape the given string of `html`.
+ *
+ * @param {String} html
+ * @return {String}
+ * @api private
+ */
+
+exports.escape = function(html){
+  return String(html)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/'/g, '&#39;')
+    .replace(/"/g, '&quot;');
+};
+ 
+
+},{}],6:[function(require,module,exports){
+
+},{}],7:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -506,7 +1034,7 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],6:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -531,7 +1059,235 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],7:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
+(function (process){
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+// resolves . and .. elements in a path array with directory names there
+// must be no slashes, empty elements, or device names (c:\) in the array
+// (so also no leading and trailing slashes - it does not distinguish
+// relative and absolute paths)
+function normalizeArray(parts, allowAboveRoot) {
+  // if the path tries to go above the root, `up` ends up > 0
+  var up = 0;
+  for (var i = parts.length - 1; i >= 0; i--) {
+    var last = parts[i];
+    if (last === '.') {
+      parts.splice(i, 1);
+    } else if (last === '..') {
+      parts.splice(i, 1);
+      up++;
+    } else if (up) {
+      parts.splice(i, 1);
+      up--;
+    }
+  }
+
+  // if the path is allowed to go above the root, restore leading ..s
+  if (allowAboveRoot) {
+    for (; up--; up) {
+      parts.unshift('..');
+    }
+  }
+
+  return parts;
+}
+
+// Split a filename into [root, dir, basename, ext], unix version
+// 'root' is just a slash, or nothing.
+var splitPathRe =
+    /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$/;
+var splitPath = function(filename) {
+  return splitPathRe.exec(filename).slice(1);
+};
+
+// path.resolve([from ...], to)
+// posix version
+exports.resolve = function() {
+  var resolvedPath = '',
+      resolvedAbsolute = false;
+
+  for (var i = arguments.length - 1; i >= -1 && !resolvedAbsolute; i--) {
+    var path = (i >= 0) ? arguments[i] : process.cwd();
+
+    // Skip empty and invalid entries
+    if (typeof path !== 'string') {
+      throw new TypeError('Arguments to path.resolve must be strings');
+    } else if (!path) {
+      continue;
+    }
+
+    resolvedPath = path + '/' + resolvedPath;
+    resolvedAbsolute = path.charAt(0) === '/';
+  }
+
+  // At this point the path should be resolved to a full absolute path, but
+  // handle relative paths to be safe (might happen when process.cwd() fails)
+
+  // Normalize the path
+  resolvedPath = normalizeArray(filter(resolvedPath.split('/'), function(p) {
+    return !!p;
+  }), !resolvedAbsolute).join('/');
+
+  return ((resolvedAbsolute ? '/' : '') + resolvedPath) || '.';
+};
+
+// path.normalize(path)
+// posix version
+exports.normalize = function(path) {
+  var isAbsolute = exports.isAbsolute(path),
+      trailingSlash = substr(path, -1) === '/';
+
+  // Normalize the path
+  path = normalizeArray(filter(path.split('/'), function(p) {
+    return !!p;
+  }), !isAbsolute).join('/');
+
+  if (!path && !isAbsolute) {
+    path = '.';
+  }
+  if (path && trailingSlash) {
+    path += '/';
+  }
+
+  return (isAbsolute ? '/' : '') + path;
+};
+
+// posix version
+exports.isAbsolute = function(path) {
+  return path.charAt(0) === '/';
+};
+
+// posix version
+exports.join = function() {
+  var paths = Array.prototype.slice.call(arguments, 0);
+  return exports.normalize(filter(paths, function(p, index) {
+    if (typeof p !== 'string') {
+      throw new TypeError('Arguments to path.join must be strings');
+    }
+    return p;
+  }).join('/'));
+};
+
+
+// path.relative(from, to)
+// posix version
+exports.relative = function(from, to) {
+  from = exports.resolve(from).substr(1);
+  to = exports.resolve(to).substr(1);
+
+  function trim(arr) {
+    var start = 0;
+    for (; start < arr.length; start++) {
+      if (arr[start] !== '') break;
+    }
+
+    var end = arr.length - 1;
+    for (; end >= 0; end--) {
+      if (arr[end] !== '') break;
+    }
+
+    if (start > end) return [];
+    return arr.slice(start, end - start + 1);
+  }
+
+  var fromParts = trim(from.split('/'));
+  var toParts = trim(to.split('/'));
+
+  var length = Math.min(fromParts.length, toParts.length);
+  var samePartsLength = length;
+  for (var i = 0; i < length; i++) {
+    if (fromParts[i] !== toParts[i]) {
+      samePartsLength = i;
+      break;
+    }
+  }
+
+  var outputParts = [];
+  for (var i = samePartsLength; i < fromParts.length; i++) {
+    outputParts.push('..');
+  }
+
+  outputParts = outputParts.concat(toParts.slice(samePartsLength));
+
+  return outputParts.join('/');
+};
+
+exports.sep = '/';
+exports.delimiter = ':';
+
+exports.dirname = function(path) {
+  var result = splitPath(path),
+      root = result[0],
+      dir = result[1];
+
+  if (!root && !dir) {
+    // No dirname whatsoever
+    return '.';
+  }
+
+  if (dir) {
+    // It has a dirname, strip trailing slash
+    dir = dir.substr(0, dir.length - 1);
+  }
+
+  return root + dir;
+};
+
+
+exports.basename = function(path, ext) {
+  var f = splitPath(path)[2];
+  // TODO: make this comparison case-insensitive on windows?
+  if (ext && f.substr(-1 * ext.length) === ext) {
+    f = f.substr(0, f.length - ext.length);
+  }
+  return f;
+};
+
+
+exports.extname = function(path) {
+  return splitPath(path)[3];
+};
+
+function filter (xs, f) {
+    if (xs.filter) return xs.filter(f);
+    var res = [];
+    for (var i = 0; i < xs.length; i++) {
+        if (f(xs[i], i, xs)) res.push(xs[i]);
+    }
+    return res;
+}
+
+// String.prototype.substr - negative index don't work in IE8
+var substr = 'ab'.substr(-1) === 'b'
+    ? function (str, start, len) { return str.substr(start, len) }
+    : function (str, start, len) {
+        if (start < 0) start = str.length + start;
+        return str.substr(start, len);
+    }
+;
+
+}).call(this,require('_process'))
+},{"_process":10}],10:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -596,14 +1352,14 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],8:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],9:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 (function (process,global){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -1193,7 +1949,7 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":8,"_process":7,"inherits":6}],10:[function(require,module,exports){
+},{"./support/isBuffer":11,"_process":10,"inherits":8}],13:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -1228,24 +1984,86 @@ function extend(origin, add) {
   return origin;
 }
 
-},{}],11:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 'use strict';
 
-var Bindee = require('../../index'),
-	bindee1;
+var Bindie = require('../../index'),
+	bindie1,
+	yawbutton,
+	rafbutton,
+	ajaxbutton;
 
-var tabEvents = function () {
-	bindee1.on('tabsShowIndex', function (index) {
-		console.log('tab show index', index);
-	});
+var yawprofiledata = {
+		username: "@yawetse",
+		profile: {
+			summary: "<h2>@yawetse's profile</h2><p>probably from database</p>"
+		}
+	},
+	rafprofiledata = {
+		username: "@sonicsound",
+		profile: {
+			summary: "<h2>@sonicsound's profile</h2><p>probably you can overwrite render function with own template language from database</p>"
+		}
+	},
+	ajaxprofiledata = {
+		username: "@ajaxmockcall",
+		profile: {
+			summary: "<h2>grab this from ajax post/get</p>"
+		}
+	};
+
+var loadprofile = function (e) {
+	var etarget = e.target;
+	if (etarget.id === 'yawbutton') {
+		bindie1.update({
+			data: yawprofiledata
+		});
+	}
+	else if (etarget.id === 'rafbutton') {
+		bindie1.update({
+			data: rafprofiledata
+		});
+	}
+	else if (etarget.id === 'ajaxbutton') {
+		bindie1.update({
+			data: ajaxprofiledata
+		});
+	}
 };
 
-window.addEventListener('load', function () {
-	var tabelement = document.getElementById('tabs');
-	bindee1 = new Bindee(tabelement);
-	tabEvents();
+// var tabEvents = function () {
+// 	bindie1.on('tabsShowIndex', function (index) {
+// 		console.log('tab show index', index);
+// 	});
+// };
 
-	window.bindee1 = bindee1;
+window.addEventListener('load', function () {
+
+	yawbutton = document.querySelector('#yawbutton');
+	rafbutton = document.querySelector('#rafbutton');
+	ajaxbutton = document.querySelector('#ajaxbutton');
+
+	bindie1 = new Bindie({
+		// watchers:
+	});
+
+	bindie1.addBinder({
+		prop: 'username',
+		elementSelector: '#username',
+		binderType: 'value'
+	});
+
+	bindie1.addBinder({
+		prop: 'profile',
+		elementSelector: '#profile',
+		binderType: 'template',
+		binderTemplate: document.querySelector('#profile-template').innerHTML
+	});
+
+	yawbutton.addEventListener('click', loadprofile, false);
+	rafbutton.addEventListener('click', loadprofile, false);
+	ajaxbutton.addEventListener('click', loadprofile, false);
+	window.bindie1 = bindie1;
 }, false);
 
-},{"../../index":1}]},{},[11]);
+},{"../../index":1}]},{},[14]);
