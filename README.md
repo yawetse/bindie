@@ -100,7 +100,10 @@ myBindie.update({
 myBindie.addBinder({
   elementSelector:responsefromajax,
   binderType: 'value' || 'innerHTML' || 'template',
-  binderTemplate: document.querySelector('#templatehtml').innerHTML
+  binderTemplate: document.querySelector('#templatehtml').innerHTML,
+    binderCallback: function (cbdata) {
+      console.log(cbdata);
+    }
 }); 
 
 //events
