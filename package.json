@@ -2,7 +2,7 @@
   "title": "Bindie - CommonJS/Browserified Data, Model, View binding",
   "name": "bindie",
   "description": "CommonJS/Browserified simple data view binding, without magic. This is a quick and light weight vanilla JS way to data bind UI elements",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "index.js",
   "engines": {
     "node": ">=0.10.x"
@@ -15,7 +15,6 @@
     "url": "git@github.com:yawetse/bindie.git"
   },
   "dependencies": {
-    "classie": ">=0.1.0",
     "ejs": ">=0.8.5",
     "util-extend": ">=1.0.1"
   },

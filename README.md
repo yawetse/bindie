@@ -45,7 +45,10 @@ window.addEventListener('load',function(){
   myBindie.addBinder({
     prop: 'field1',
     elementSelector: '#field1',
-    binderType: 'value'
+    binderType: 'value',
+    binderCallback: function (cbdata) {
+      console.log(cbdata);
+    }
   });
   myBindie.addBinder({
     prop: 'field2',

@@ -64,7 +64,10 @@ window.addEventListener('load', function () {
 	bindie1.addBinder({
 		prop: 'username',
 		elementSelector: '#username',
-		binderType: 'value'
+		binderType: 'value',
+		binderCallback: function (cbdata) {
+			console.log(cbdata);
+		}
 	});
 
 	bindie1.addBinder({
