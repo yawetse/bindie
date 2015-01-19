@@ -19,9 +19,9 @@ module.exports = require('./lib/bindie');
  */
 'use strict';
 
-var extend = require('util-extend'),
-	ejs = require('ejs'),
+var ejs = require('ejs'),
 	events = require('events'),
+	extend = require('util-extend'),
 	util = require('util');
 
 /**
@@ -67,7 +67,8 @@ bindie.prototype._addBinder = function (options) {
 		this.binders[options.prop] = {
 			binder_el_selector: options.elementSelector,
 			binder_type: options.binderType || 'value',
-			binder_template: options.binderTemplate
+			binder_template: options.binderTemplate,
+			binder_update_callback: options.binderCallback
 		};
 
 		this.emit('addedBinder', this.binders[options.prop]);
@@ -104,6 +105,14 @@ bindie.prototype._update = function (options) {
 				binderElement.innerHTML = this.render({
 					data: binderData,
 					template: binderTemplate
+				});
+			}
+
+			if (binder.binder_update_callback && typeof binder.binder_update_callback === 'function') {
+				binder.binder_update_callback({
+					prop: prop,
+					binder_el_selector: binder.binder_el_selector,
+					data: binderData
 				});
 			}
 		}
@@ -1290,6 +1299,8 @@ var process = module.exports = {};
 process.nextTick = (function () {
     var canSetImmediate = typeof window !== 'undefined'
     && window.setImmediate;
+    var canMutationObserver = typeof window !== 'undefined'
+    && window.MutationObserver;
     var canPost = typeof window !== 'undefined'
     && window.postMessage && window.addEventListener
     ;
@@ -1298,8 +1309,29 @@ process.nextTick = (function () {
         return function (f) { return window.setImmediate(f) };
     }
 
+    var queue = [];
+
+    if (canMutationObserver) {
+        var hiddenDiv = document.createElement("div");
+        var observer = new MutationObserver(function () {
+            var queueList = queue.slice();
+            queue.length = 0;
+            queueList.forEach(function (fn) {
+                fn();
+            });
+        });
+
+        observer.observe(hiddenDiv, { attributes: true });
+
+        return function nextTick(fn) {
+            if (!queue.length) {
+                hiddenDiv.setAttribute('yes', 'no');
+            }
+            queue.push(fn);
+        };
+    }
+
     if (canPost) {
-        var queue = [];
         window.addEventListener('message', function (ev) {
             var source = ev.source;
             if ((source === window || source === null) && ev.data === 'process-tick') {
@@ -1339,7 +1371,7 @@ process.emit = noop;
 
 process.binding = function (name) {
     throw new Error('process.binding is not supported');
-}
+};
 
 // TODO(shtylman)
 process.cwd = function () { return '/' };
@@ -2046,7 +2078,10 @@ window.addEventListener('load', function () {
 	bindie1.addBinder({
 		prop: 'username',
 		elementSelector: '#username',
-		binderType: 'value'
+		binderType: 'value',
+		binderCallback: function (cbdata) {
+			console.log(cbdata);
+		}
 	});
 
 	bindie1.addBinder({

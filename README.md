@@ -45,7 +45,10 @@ window.addEventListener('load',function(){
   myBindie.addBinder({
     prop: 'field1',
     elementSelector: '#field1',
-    binderType: 'value'
+    binderType: 'value',
+    binderCallback: function (cbdata) {
+      console.log(cbdata);
+    }
   });
   myBindie.addBinder({
     prop: 'field2',
@@ -97,7 +100,10 @@ myBindie.update({
 myBindie.addBinder({
   elementSelector:responsefromajax,
   binderType: 'value' || 'innerHTML' || 'template',
-  binderTemplate: document.querySelector('#templatehtml').innerHTML
+  binderTemplate: document.querySelector('#templatehtml').innerHTML,
+    binderCallback: function (cbdata) {
+      console.log(cbdata);
+    }
 }); 
 
 //events
