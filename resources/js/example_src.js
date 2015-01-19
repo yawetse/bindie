@@ -3,25 +3,24 @@
 var Bindie = require('../../index'),
 	bindie1,
 	yawbutton,
-	rafbutton,
-	ajaxbutton;
+	rafbutton;
 
 var yawprofiledata = {
-		username: "@yawetse",
+		username: '@yawetse',
 		profile: {
-			summary: "<h2>@yawetse's profile</h2><p>probably from database</p>"
+			summary: '<h2>@yawetse\'s profile</h2><p>probably from database</p>'
 		}
 	},
 	rafprofiledata = {
-		username: "@sonicsound",
+		username: '@sonicsound',
 		profile: {
-			summary: "<h2>@sonicsound's profile</h2><p>you can overwrite Bindie's  render prototype function to use your favorite own template language. The default is EJS</p>"
+			summary: '<h2>@sonicsound\'s profile</h2><p>you can overwrite Bindie\'s  render prototype function to use your favorite own template language. The default is EJS</p>'
 		}
 	},
 	ajaxprofiledata = {
-		username: "@ajaxmockcall",
+		username: '@ajaxmockcall',
 		profile: {
-			summary: "<h2>grab this from ajax post/get</p>"
+			summary: '<h2>grab this from ajax post/get</p>'
 		}
 	};
 
@@ -57,8 +56,7 @@ window.addEventListener('load', function () {
 	// ajaxbutton = document.querySelector('#ajaxbutton');
 
 	bindie1 = new Bindie({
-		ejsopen: '{{',
-		ejsclose: '}}'
+		ejsdelimiter: '?'
 	});
 
 	bindie1.addBinder({
