@@ -2,7 +2,7 @@
   "title": "Bindie - CommonJS/Browserified Data, Model, View binding",
   "name": "bindie",
   "description": "CommonJS/Browserified simple data view binding, without magic. This is a quick and light weight vanilla JS way to data bind UI elements",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "main": "index.js",
   "engines": {
     "node": ">=0.10.x"
